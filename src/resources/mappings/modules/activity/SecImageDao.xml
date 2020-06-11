@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecImageDao">
+    
+	<sql id="secImageColumns">
+		a.id AS "id",
+		a.img_path AS "imgPath",
+		a.activity_id AS "activityId"
+	</sql>
+	
+	<sql id="secImageJoins">
+	</sql>
+    
+	<select id="get" resultType="SecImage">
+		SELECT 
+			<include refid="secImageColumns"/>
+		FROM sec_image a
+		<include refid="secImageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SecImage">
+		SELECT 
+			<include refid="secImageColumns"/>
+		FROM sec_image a
+		<include refid="secImageJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecImage">
+		SELECT 
+			<include refid="secImageColumns"/>
+		FROM sec_image a
+		<include refid="secImageJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_image(
+			id,
+			img_path,
+			activity_id
+		) VALUES (
+			#{id},
+			#{imgPath},
+			#{activityId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_image SET 	
+			img_path = #{imgPath},
+			activity_id = #{activityId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_image
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

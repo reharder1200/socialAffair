@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecActivityCollectionDao">
+    
+	<sql id="secActivityCollectionColumns">
+		a.id AS "id",
+		a.activity_id AS "activityId",
+		a.user_id AS "user.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="secActivityCollectionJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SecActivityCollection">
+		SELECT 
+			<include refid="secActivityCollectionColumns"/>
+		FROM sec_activity_collection a
+		<include refid="secActivityCollectionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SecActivityCollection">
+		SELECT 
+			<include refid="secActivityCollectionColumns"/>
+		FROM sec_activity_collection a
+		<include refid="secActivityCollectionJoins"/>
+		<where>
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId} 
+			</if>
+			<if test="activityId != null and activityId != ''">
+				AND a.activity_id = #{activityId} 
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecActivityCollection">
+		SELECT 
+			<include refid="secActivityCollectionColumns"/>
+		FROM sec_activity_collection a
+		<include refid="secActivityCollectionJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_activity_collection(
+			id,
+			activity_id,
+			user_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{activityId},
+			#{user.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_activity_collection SET 	
+			activity_id = #{activityId},
+			user_id = #{user.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_activity_collection
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecEvaluateDao">
+    
+	<sql id="secEvaluateColumns">
+		a.id AS "id",
+		a.activity_id AS "activityId",
+		a.user_id AS "user.id",
+		a.content AS "content",
+		a.activity_score AS "activityScore",
+		a.organizer_score AS "organizerScore",
+		a.is_show AS "isShow",
+		a.show_order AS "showOrder",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="secEvaluateJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SecEvaluate">
+		SELECT 
+			<include refid="secEvaluateColumns"/>
+		FROM sec_evaluate a
+		<include refid="secEvaluateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SecEvaluate">
+		SELECT 
+			<include refid="secEvaluateColumns"/>
+		FROM sec_evaluate a
+		<include refid="secEvaluateJoins"/>
+		<where>
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId} 
+			</if>
+			<if test="activityId != null and activityId != ''">
+				AND a.activity_id = #{activityId} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecEvaluate">
+		SELECT 
+			<include refid="secEvaluateColumns"/>
+		FROM sec_evaluate a
+		<include refid="secEvaluateJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_evaluate(
+			id,
+			activity_id,
+			user_id,
+			content,
+			activity_score,
+			organizer_score,
+			is_show,
+			show_order,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{activityId},
+			#{user.id},
+			#{content},
+			#{activityScore},
+			#{organizerScore},
+			#{isShow},
+			#{showOrder},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_evaluate SET 	
+			activity_id = #{activityId},
+			user_id = #{user.id},
+			content = #{content},
+			activity_score = #{activityScore},
+			organizer_score = #{organizerScore},
+			is_show = #{isShow},
+			show_order = #{showOrder},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_evaluate
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

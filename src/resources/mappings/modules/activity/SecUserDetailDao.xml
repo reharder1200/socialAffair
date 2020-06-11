@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecUserDetailDao">
+    
+	<sql id="secUserDetailColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.name AS "name",
+		a.sex AS "sex",
+		a.age AS "age",
+		a.phone AS "phone",
+		a.email AS "email",
+		a.certificate_type AS "certificateType",
+		a.certificate_num AS "certificateNum",
+		a.address AS "address",
+		a.reserver_name AS "reserverName",
+		a.reserver_mobile AS "reserverMobile",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		u2.name AS "user.name"
+	</sql>
+	
+	<sql id="secUserDetailJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SecUserDetail">
+		SELECT 
+			<include refid="secUserDetailColumns"/>
+		FROM sec_user_detail a
+		<include refid="secUserDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SecUserDetail">
+		SELECT 
+			<include refid="secUserDetailColumns"/>
+		FROM sec_user_detail a
+		<include refid="secUserDetailJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="selectUserId != null and selectUserId != ''">
+				AND a.user_id = #{selectUserId}
+			</if>
+			
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecUserDetail">
+		SELECT 
+			<include refid="secUserDetailColumns"/>
+		FROM sec_user_detail a
+		<include refid="secUserDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_user_detail(
+			id,
+			user_id,
+			name,
+			sex,
+			age,
+			phone,
+			email,
+			certificate_type,
+			certificate_num,
+			address,
+			reserver_name,
+			reserver_mobile,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{name},
+			#{sex},
+			#{age},
+			#{phone},
+			#{email},
+			#{certificateType},
+			#{certificateNum},
+			#{address},
+			#{reserverName},
+			#{reserverMobile},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_user_detail SET 	
+			user_id = #{user.id},
+			name = #{name},
+			sex = #{sex},
+			age = #{age},
+			phone = #{phone},
+			email = #{email},
+			certificate_type = #{certificateType},
+			certificate_num = #{certificateNum},
+			address = #{address},
+			reserver_name = #{reserverName},
+			reserver_mobile = #{reserverMobile},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_user_detail
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

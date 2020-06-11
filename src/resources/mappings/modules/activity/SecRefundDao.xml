@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecRefundDao">
+    <sql id="secRefundColumns">
+		a.id AS "id",
+		a.out_refund_no AS "outRefundNo",
+		a.order_id AS "orderId",
+		a.activity_id AS "activityId",
+		a.openid AS "openid",
+		a.total_fee AS "totalFee",
+		a.refund_reason AS "refundReason",
+		a.refund_status AS "refundStatus",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="secRefundJoins">
+	</sql>
+    
+	<select id="get" resultType="SecRefund">
+		SELECT 
+			<include refid="secRefundColumns"/>
+		FROM sec_refund a
+		<include refid="secRefundJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByRefundId" resultType="SecRefund">
+		SELECT 
+			<include refid="secRefundColumns"/>
+		FROM sec_refund a
+		<include refid="secRefundJoins"/>
+		WHERE a.out_refund_no = #{outRefundNo}
+	</select>
+	
+	<select id="findList" resultType="SecRefund">
+		SELECT 
+			<include refid="secRefundColumns"/>
+		FROM sec_refund a
+		<include refid="secRefundJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecRefund">
+		SELECT 
+			<include refid="secRefundColumns"/>
+		FROM sec_refund a
+		<include refid="secRefundJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_refund(
+			id,
+			out_refund_no,
+			order_id,
+			activity_id,
+			openid,
+			total_fee,
+			refund_reason,
+			refund_status,
+			create_date,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{outRefundNo},
+			#{orderId},
+			#{activityId},
+			#{openid},
+			#{totalFee},
+			#{refundReason},
+			#{refundStatus},
+			#{createDate},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_refund SET 	
+			out_refund_no = #{outRefundNo},
+			order_id = #{orderId},
+			activity_id = #{activityId},
+			openid = #{openid},
+			total_fee = #{totalFee},
+			refund_reason = #{refundReason},
+			refund_status = #{refundStatus},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_refund
+		WHERE id = #{id}
+	</update>
+</mapper>

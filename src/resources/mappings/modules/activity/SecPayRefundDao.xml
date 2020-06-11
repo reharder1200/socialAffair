@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecPayRefundDao">
+    
+	<sql id="secPayRefundColumns">
+		a.id AS "id",
+		a.openid AS "openid",
+		a.out_refund_no AS "out_refund_no",
+		a.out_trade_no AS "out_trade_no",
+		a.refund_desc AS "refund_desc",
+		a.refund_id AS "refund_id",
+		a.appid AS "appid",
+		a.mch_id AS "mch_id",
+		a.nonce_str AS "nonce_str",
+		a.sign AS "sign",
+		a.sign_type AS "sign_type",
+		a.total_fee AS "total_fee",
+		a.settlement_total_fee AS "settlement_total_fee",
+		a.fee_type AS "fee_type",
+		a.cash_fee AS "cash_fee",
+		a.cash_fee_type AS "cash_fee_type",
+		a.transaction_id AS "transaction_id",
+		a.time_end AS "time_end",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.err_code AS "err_code",
+		a.refund_status AS "refundStatus",
+		a.coupon_refund_count AS "coupon_refund_count",
+		a.coupon_refund_fee AS "coupon_refund_fee",
+		a.cash_refund_fee AS "cash_refund_fee",
+		a.refund_fee_type AS "refund_fee_type",
+		a.settlement_refund_fee AS "settlement_refund_fee",
+		a.refund_fee AS "refund_fee",
+		a.err_code_des AS "err_code_des",
+		a.success_time AS "success_time",
+		a.refund_recv_accout AS "refund_recv_accout",
+		a.refund_account AS "refund_account",
+		a.refund_request_source AS "refund_request_source"
+	</sql>
+	
+	<sql id="secPayRefundJoins">
+	</sql>
+    
+	<select id="get" resultType="SecPayRefund">
+		SELECT 
+			<include refid="secPayRefundColumns"/>
+		FROM sec_pay_refund a
+		<include refid="secPayRefundJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByOutRefundNo" resultType="SecPayRefund">
+		SELECT 
+			<include refid="secPayRefundColumns"/>
+		FROM sec_pay_refund a
+		<include refid="secPayRefundJoins"/>
+		WHERE a.out_refund_no = #{out_refund_no}
+	</select>
+	
+	<select id="findList" resultType="SecPayRefund">
+		SELECT 
+			<include refid="secPayRefundColumns"/>
+		FROM sec_pay_refund a
+		<include refid="secPayRefundJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecPayRefund">
+		SELECT 
+			<include refid="secPayRefundColumns"/>
+		FROM sec_pay_refund a
+		<include refid="secPayRefundJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_pay_refund(
+			id,
+			openid,
+			out_refund_no,
+			out_trade_no,
+			refund_desc,
+			refund_id,
+			appid,
+			mch_id,
+			nonce_str,
+			sign,
+			sign_type,
+			total_fee,
+			settlement_total_fee,
+			fee_type,
+			cash_fee,
+			cash_fee_type,
+			transaction_id,
+			create_date,
+			update_date,
+			remarks,
+			err_code,
+			refund_status,
+			coupon_refund_count,
+			coupon_refund_fee,
+			cash_refund_fee,
+			refund_fee_type,
+			settlement_refund_fee,
+			refund_fee,
+			err_code_des,
+			success_time,
+			refund_recv_accout,
+			refund_account,
+			refund_request_source
+		) VALUES (
+			#{id},
+			#{openid},
+			#{out_refund_no},
+			#{out_trade_no},
+			#{refund_desc},
+			#{refund_id},
+			#{appid},
+			#{mch_id},
+			#{nonce_str},
+			#{sign},
+			#{sign_type},
+			#{total_fee},
+			#{settlement_total_fee},
+			#{fee_type},
+			#{cash_fee},
+			#{cash_fee_type},
+			#{transaction_id},
+			#{createDate},
+			#{updateDate},
+			#{remarks},
+			#{err_code},
+			#{refundStatus},
+			#{coupon_refund_count},
+			#{coupon_refund_fee},
+			#{cash_refund_fee},
+			#{refund_fee_type},
+			#{settlement_refund_fee},
+			#{refund_fee},
+			#{err_code_des},
+			#{success_time},
+			#{refund_recv_accout},
+			#{refund_account},
+			#{refund_request_source}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_pay_refund SET 	
+			openid = #{openid},
+			out_refund_no = #{out_refund_no},
+			out_trade_no = #{out_trade_no},
+			refund_desc = #{refund_desc},
+			refund_id = #{refund_id},
+			appid = #{appid},
+			mch_id = #{mch_id},
+			nonce_str = #{nonce_str},
+			sign = #{sign},
+			sign_type = #{sign_type},
+			total_fee = #{total_fee},
+			settlement_total_fee = #{settlement_total_fee},
+			fee_type = #{fee_type},
+			cash_fee = #{cash_fee},
+			cash_fee_type = #{cash_fee_type},
+			transaction_id = #{transaction_id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			err_code = #{err_code},
+			refund_status = #{refundStatus},
+			coupon_refund_count = #{coupon_refund_count},
+			coupon_refund_fee = #{coupon_refund_fee},
+			cash_refund_fee = #{cash_refund_fee},
+			refund_fee_type = #{refund_fee_type},
+			settlement_refund_fee = #{settlement_refund_fee},
+			refund_fee = #{refund_fee},
+			err_code_des = #{err_code_des},
+			success_time = #{success_time},
+			refund_recv_accout = #{refund_recv_accout},
+			refund_account = #{refund_account},
+			refund_request_source = #{refund_request_source}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_pay_refund
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

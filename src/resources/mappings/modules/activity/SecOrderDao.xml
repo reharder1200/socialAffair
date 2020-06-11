@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecOrderDao">
+    
+	<sql id="secOrderColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.order_type AS "orderType",
+		a.pay_type AS "payType",
+		a.pay_status AS "payStatus",
+		a.total_amount AS "totalAmount",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="secOrderJoins">
+	</sql>
+    
+	<select id="get" resultType="SecOrder">
+		SELECT 
+			<include refid="secOrderColumns"/>
+		FROM sec_order a
+		<include refid="secOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByOrderId" resultType="SecOrder">
+		SELECT 
+			<include refid="secOrderColumns"/>
+		FROM sec_order a
+		<include refid="secOrderJoins"/>
+		WHERE a.order_id = #{orderId}
+	</select>
+	
+	<select id="findList" resultType="SecOrder">
+		SELECT 
+			<include refid="secOrderColumns"/>
+		FROM sec_order a
+		<include refid="secOrderJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecOrder">
+		SELECT 
+			<include refid="secOrderColumns"/>
+		FROM sec_order a
+		<include refid="secOrderJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_order(
+			id,
+			order_id,
+			order_type,
+			pay_type,
+			pay_status,
+			total_amount,
+			create_date,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{orderId},
+			#{orderType},
+			#{payType},
+			#{payStatus},
+			#{totalAmount},
+			#{createDate},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_order SET 	
+			order_id = #{orderId},
+			order_type = #{orderType},
+			pay_type = #{payType},
+			pay_status = #{payStatus},
+			total_amount = #{totalAmount},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_order
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

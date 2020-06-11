@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecActivityDao">
+    
+	<sql id="secActivityColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.type AS "type",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.min_people AS "minPeople",
+		a.max_people AS "maxPeople",
+		a.province AS "province",
+		a.city AS "city",
+		a.district AS "district",
+		a.location_detatil AS "locationDetatil",
+		a.activity_lat AS "activityLat",
+		a.activity_lon AS "activityLon",
+		a.charge_type AS "chargeType",
+		a.charge_amount AS "chargeAmount",
+		a.activity_description AS "activityDescription",
+		a.pic_save_url AS "picSaveUrl",
+		a.contact_wx AS "contactWx",
+		a.contact_mobile AS "contactMobile",
+		a.activity_status AS "activityStatus",
+		a.deposit_status AS "depositStatus",
+		a.order_id AS "orderId",
+		a.activity_starter AS "activityStarter",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		i.img_path as "imageIds",
+		a.remarks AS "remarks"
+		
+	</sql>
+	
+	<sql id="secActivityJoins">
+		left JOIN sec_image i on a.id = i.activity_id
+		left JOIN sec_activity_apply apply on a.id = apply.activity_id
+		left JOIN sec_activity_collection collection on a.id = collection.activity_id
+		left JOIN sec_evaluate evaluate on a.id = evaluate.activity_id
+	</sql>
+    
+	<select id="get" resultType="SecActivity">
+		SELECT 
+			DISTINCT 
+			<include refid="secActivityColumns"/>
+		FROM sec_activity a
+		<include refid="secActivityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SecActivity">
+		SELECT 
+		 DISTINCT 
+			<include refid="secActivityColumns"/>
+			${sqlMap.column}
+		FROM sec_activity a
+		<include refid="secActivityJoins"/>
+		<where>
+			
+			<if test="remarks != null and remarks != ''">
+				AND a.create_by LIKE 
+					<if test="dbName == 'oracle'">'%'||#{remarks}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{remarks}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{remarks},'%')</if>
+			</if>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			
+			
+			${sqlMap.where}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecActivity">
+		SELECT 
+			DISTINCT 
+			<include refid="secActivityColumns"/>
+		FROM sec_activity a
+		<include refid="secActivityJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_activity(
+			id,
+			title,
+			type,
+			begin_date,
+			end_date,
+			min_people,
+			max_people,
+			province,
+			city,
+			district,
+			location_detatil,
+			activity_lat,
+			activity_lon,
+			charge_type,
+			charge_amount,
+			activity_description,
+			pic_save_url,
+			contact_wx,
+			contact_mobile,
+			activity_status,
+			deposit_status,
+			order_id,
+			activity_starter,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{title},
+			#{type},
+			#{beginDate},
+			#{endDate},
+			#{minPeople},
+			#{maxPeople},
+			#{province},
+			#{city},
+			#{district},
+			#{locationDetatil},
+			#{activityLat},
+			#{activityLon},
+			#{chargeType},
+			#{chargeAmount},
+			#{activityDescription},
+			#{picSaveUrl},
+			#{contactWx},
+			#{contactMobile},
+			#{activityStatus},
+			#{depositStatus},
+			#{orderId},
+			#{activityStarter},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_activity SET 	
+			title = #{title},
+			type = #{type},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			min_people = #{minPeople},
+			max_people = #{maxPeople},
+			province = #{province},
+			city = #{city},
+			district = #{district},
+			location_detatil = #{locationDetatil},
+			activity_lat = #{activityLat},
+			activity_lon = #{activityLon},
+			charge_type = #{chargeType},
+			charge_amount = #{chargeAmount},
+			activity_description = #{activityDescription},
+			pic_save_url = #{picSaveUrl},
+			contact_wx = #{contactWx},
+			contact_mobile = #{contactMobile},
+			activity_status = #{activityStatus},
+			deposit_status = #{depositStatus},
+			order_id = #{orderId},
+			activity_starter = #{activityStarter},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_activity
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

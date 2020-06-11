@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecActivityAlarmDao">
+    
+	<sql id="secActivityAlarmColumns">
+		a.id AS "id",
+		a.activity_id AS "activityId",
+		a.user_id AS "user.id",
+		a.alarm_date AS "alarmDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="secActivityAlarmJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="SecActivityAlarm">
+		SELECT 
+			<include refid="secActivityAlarmColumns"/>
+		FROM sec_activity_alarm a
+		<include refid="secActivityAlarmJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SecActivityAlarm">
+		SELECT 
+			<include refid="secActivityAlarmColumns"/>
+		FROM sec_activity_alarm a
+		<include refid="secActivityAlarmJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SecActivityAlarm">
+		SELECT 
+			<include refid="secActivityAlarmColumns"/>
+		FROM sec_activity_alarm a
+		<include refid="secActivityAlarmJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sec_activity_alarm(
+			id,
+			activity_id,
+			user_id,
+			alarm_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{activityId},
+			#{user.id},
+			#{alarmDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sec_activity_alarm SET 	
+			activity_id = #{activityId},
+			user_id = #{user.id},
+			alarm_date = #{alarmDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sec_activity_alarm
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
