@@ -59,8 +59,8 @@ public class SecRefundService extends CrudService<SecRefundDao, SecRefund> {
 		/* 构建微信退款订单时 */
 		SecPayRefund secPayRefund = new SecPayRefund();
 		String outRefundNo = IdGen.randomBase62(32);//生成唯一的退款订单号
-		secPayRefund.setTotal_fee(new Double(Double.parseDouble(secRefund.getTotalFee())*100).intValue());//发送到微信后台的总金额单位是分，必须为整数
-		secPayRefund.setRefund_fee(new Double(Double.parseDouble(secRefund.getTotalFee())*100).intValue());//发送到微信后台的总金额单位是分，必须为整数
+		secPayRefund.setTotal_fee(String.valueOf(new Double(Double.parseDouble(secRefund.getTotalFee())*100).intValue()));//发送到微信后台的总金额单位是分，必须为整数
+		secPayRefund.setRefund_fee(String.valueOf(new Double(Double.parseDouble(secRefund.getTotalFee())*100).intValue()));//发送到微信后台的总金额单位是分，必须为整数
 		secPayRefund.setOut_trade_no(secRefund.getOrderId());
 		secPayRefund.setOut_refund_no(outRefundNo);
 		secPayRefund.setRefundStatus(SecPayRefund.REFUND_STATUS_WAIT);//待退款状态

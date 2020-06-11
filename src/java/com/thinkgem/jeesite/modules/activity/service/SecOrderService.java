@@ -87,6 +87,8 @@ public class SecOrderService extends CrudService<SecOrderDao, SecOrder> {
 		SecOrder secOrderNew = new SecOrder();
 		String orderId = IdGen.randomBase62(32);//生成唯一的订单号
 		secOrderNew.setOrderId(orderId);
+		secOrderNew.setActivityId(secActivity.getId());
+		secOrderNew.setOpenid(secUser.getWxOpenid());
 		secOrderNew.setOrderType(SecOrder.ORDER_TYPE_DEPOSIT);
 		secOrderNew.setPayType(SecOrder.PAY_TYPE_WECHAT);//默认微信支付
 		secOrderNew.setPayStatus(SecOrder.PAY_STATUS_TOPAY);//支付状态：待支付
@@ -103,7 +105,7 @@ public class SecOrderService extends CrudService<SecOrderDao, SecOrder> {
 		secPay.setAttach("starter_pay");//备注：随便写
 		secPay.setBody("deposit_pay");//商品描述
 		secPay.setDetail("starter_pay_deposit");//商品详情
-		secPay.setTotal_fee(new Double(Double.parseDouble(secOrder.getTotalAmount())*100).intValue());//发送到微信后台的总金额单位是分，必须为整数
+		secPay.setTotal_fee(String.valueOf(new Double(Double.parseDouble(secOrder.getTotalAmount())*100).intValue()));//发送到微信后台的总金额单位是分，必须为整数
 		secPay.setOut_trade_no(orderId);
 		secPay.setPayStatus(SecPay.PAY_STATUS_WAIT);//支付状态
 		secPay.setOpenid(secUser.getWxOpenid());//获取当前微信小程序用户的openid并添加进商户订单中
@@ -126,6 +128,8 @@ public class SecOrderService extends CrudService<SecOrderDao, SecOrder> {
 		SecOrder secOrderNew = new SecOrder();
 		String orderId = IdGen.randomBase62(32);//生成唯一的订单号
 		secOrderNew.setOrderId(orderId);
+		secOrderNew.setActivityId(secActivity.getId());
+		secOrderNew.setOpenid(secUser.getWxOpenid());
 		secOrderNew.setOrderType(SecOrder.ORDER_TYPE_SIGN);
 		secOrderNew.setPayType(SecOrder.PAY_TYPE_WECHAT);//默认微信支付
 		secOrderNew.setPayStatus(SecOrder.PAY_STATUS_TOPAY);//支付状态：待支付
@@ -148,7 +152,7 @@ public class SecOrderService extends CrudService<SecOrderDao, SecOrder> {
 		secPay.setAttach("candidate_pay");//备注：随便写
 		secPay.setBody("sign_pay");//商品描述
 		secPay.setDetail("candidate_pay_sign");//商品详情
-		secPay.setTotal_fee(new Double(Double.parseDouble(secOrder.getTotalAmount())*100).intValue());//发送到微信后台的总金额单位是分，必须为整数
+		secPay.setTotal_fee(String.valueOf(new Double(Double.parseDouble(secOrder.getTotalAmount())*100).intValue()));//发送到微信后台的总金额单位是分，必须为整数
 		secPay.setOut_trade_no(orderId);
 		secPay.setPayStatus(SecPay.PAY_STATUS_WAIT);//支付状态
 		secPay.setOpenid(secUser.getWxOpenid());//获取当前微信小程序用户的openid并添加进商户订单中

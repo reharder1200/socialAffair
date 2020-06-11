@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.activity.web;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -112,12 +113,21 @@ public class SecOrderController extends BaseController {
 		
 		Map<String, Object> map =  new HashMap<>();
 		if(secActivity.getId()!=null && secOrder.getTotalAmount() != null && secUser.getWxOpenid()!=null){
-			if(secOrder.getOrderType()!=null && secOrder.getOrderType().equals(SecOrder.ORDER_TYPE_DEPOSIT)){//押金订单
-				secOrderService.createOrder_deposit(secActivity,secOrder,secUser,request,map);
-			}else if(secOrder.getOrderType()!=null && secOrder.getOrderType().equals(SecOrder.ORDER_TYPE_SIGN)){//报名订单
-				secOrderService.createOrder_sign(secActivity,secOrder,secUser,request,map);
-			}else{
+			secOrder.setActivityId(secActivity.getId());
+			secOrder.setOpenid(secUser.getWxOpenid());
+			secOrder.setPayStatus(SecOrder.PAY_STATUS_TOPAY);//待支付状态
+			List<SecOrder> existList = secOrderService.findList(secOrder);
+			if(existList!=null && existList.size()>0){//避免针对同一个活动重复下单
 				result = false;
+				map.put("error_message", "当前用户当前活动已存在待支付订单信息！");
+			}else{
+				if(secOrder.getOrderType()!=null && secOrder.getOrderType().equals(SecOrder.ORDER_TYPE_DEPOSIT)){//押金订单
+					secOrderService.createOrder_deposit(secActivity,secOrder,secUser,request,map);
+				}else if(secOrder.getOrderType()!=null && secOrder.getOrderType().equals(SecOrder.ORDER_TYPE_SIGN)){//报名订单
+					secOrderService.createOrder_sign(secActivity,secOrder,secUser,request,map);
+				}else{
+					result = false;
+				}
 			}
 		}else{
 			result = false;
@@ -146,6 +156,7 @@ public class SecOrderController extends BaseController {
 		/**
 		 * 将获取的xml格式的字符串解析成map对象
 		 */
+		System.out.println("微信支付回调信息："+wxNotify);
 		Map<String, Object> map = CommonUtils.parseXml(wxNotify);
 		String result_code = (String) map.get("result_code");
 		
@@ -185,11 +196,11 @@ public class SecOrderController extends BaseController {
 					secPayLocal.setIs_subscribe(secPayFromWechat.getIs_subscribe());
 					secPayLocal.setTrade_type(secPayFromWechat.getTrade_type());
 					secPayLocal.setBank_type(secPayFromWechat.getBank_type());
-					secPayLocal.setSettlement_total_fee(secPayFromWechat.getSettlement_total_fee());
+					secPayLocal.setSettlement_total_fee(secPayFromWechat.getSettlement_total_fee().toString());
 					secPayLocal.setFee_type(secPayFromWechat.getFee_type());
-					secPayLocal.setCash_fee(secPayFromWechat.getCash_fee());
+					secPayLocal.setCash_fee(secPayFromWechat.getCash_fee().toString());
 					secPayLocal.setCash_fee_type(secPayFromWechat.getCash_fee_type());
-					secPayLocal.setCoupon_fee(secPayFromWechat.getCoupon_fee());
+					secPayLocal.setCoupon_fee(secPayFromWechat.getCoupon_fee().toString());
 					secPayLocal.setCoupon_count(secPayFromWechat.getCoupon_count());
 					secPayLocal.setTransaction_id(secPayFromWechat.getTransaction_id());
 					secPayLocal.setTime_end(secPayFromWechat.getTime_end());

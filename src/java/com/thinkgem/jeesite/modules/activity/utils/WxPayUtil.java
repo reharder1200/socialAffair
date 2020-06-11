@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.modules.activity.entity.PayInfo;
+import com.thinkgem.jeesite.modules.activity.entity.PayRefundInfo;
 import com.thinkgem.jeesite.modules.activity.entity.SecPay;
 import com.thinkgem.jeesite.modules.activity.entity.SecPayRefund;
 import com.thinkgem.jeesite.modules.activity.entity.WxPayResponesModel;
@@ -139,23 +140,23 @@ public class WxPayUtil {
 		/**
 		 * 根据商户订单构建微信退款订单
 		 */
-		PayInfo payInfo = new PayInfo(secPayRefund, request);
+		PayRefundInfo payRefundInfo = new PayRefundInfo(secPayRefund, request);
 
 		/**
 		 * 构建完订单对象，对订单信息进行签名
 		 */
-		Map<String, Object> map = CommonUtils.object2Map(payInfo);
+		Map<String, Object> map = CommonUtils.object2Map(payRefundInfo);
 		String sign = CommonUtils.createSign(Global.getConfig("APP_KEY"), map);
 
 		/**
 		 * 将签名sign写入微信订单信息
 		 */
-		payInfo.setSign(sign);
+		payRefundInfo.setSign(sign);
 
 		/**
 		 * 将订单信息转化为xml格式
 		 */
-		String xml = CommonUtils.objectToXML(payInfo);
+		String xml = CommonUtils.objectToXML(payRefundInfo);
 
 		/**
 		 * 发送至微信支付服务器
@@ -165,6 +166,7 @@ public class WxPayUtil {
 		/**
 		 * 将返回结果解析成map
 		 */
+		System.out.println("微信退款结果："+result);
 		Map<String, Object> resultMap = CommonUtils.parseXml(result);
 		//resultMap.forEach((k, v) -> System.out.println("key:" + k + "\tvalue" + v));
 		/**
@@ -180,7 +182,7 @@ public class WxPayUtil {
 				return sePayRefundFromWechat;
 			}else{
 				mapResult.put("wxResponse", "UNSUCCESS");//微信响应ok
-				System.out.println(resultMap.get("err_code").toString() + resultMap.get("err_code_des").toString());
+				System.out.println("微信退款失败原因："+resultMap.get("err_code").toString() + resultMap.get("err_code_des").toString());
 				SecPayRefund sePayRefundFromWechat = (SecPayRefund)CommonUtils.map2Object(resultMap, SecPayRefund.class);
 				return sePayRefundFromWechat;
 			}
@@ -191,5 +193,12 @@ public class WxPayUtil {
 			return null;
 		}
 		
+	}
+	
+	public static void main(String[] args) {
+		Map<String, Object> resultMap =new HashMap<>();
+		resultMap.put("total_fee", 1);
+		SecPayRefund sePayRefundFromWechat = (SecPayRefund)CommonUtils.map2Object(resultMap, SecPayRefund.class);
+		System.out.println(sePayRefundFromWechat.getTotal_fee());
 	}
 }

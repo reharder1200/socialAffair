@@ -161,16 +161,16 @@ public class SecPay extends DataEntity<SecPay> {
 		return total_fee;
 	}
 
-	public void setTotal_fee(Integer total_fee) {
-		this.total_fee = total_fee;
+	public void setTotal_fee(String total_fee) {
+		this.total_fee = Integer.parseInt(total_fee);
 	}
 
 	public Integer getSettlement_total_fee() {
 		return settlement_total_fee;
 	}
 
-	public void setSettlement_total_fee(Integer settlement_total_fee) {
-		this.settlement_total_fee = settlement_total_fee;
+	public void setSettlement_total_fee(String settlement_total_fee) {
+		this.settlement_total_fee = Integer.parseInt(settlement_total_fee);
 	}
 
 	public String getFee_type() {
@@ -185,8 +185,8 @@ public class SecPay extends DataEntity<SecPay> {
 		return cash_fee;
 	}
 
-	public void setCash_fee(Integer cash_fee) {
-		this.cash_fee = cash_fee;
+	public void setCash_fee(String cash_fee) {
+		this.cash_fee = Integer.parseInt(cash_fee);
 	}
 
 	public String getCash_fee_type() {
@@ -201,8 +201,8 @@ public class SecPay extends DataEntity<SecPay> {
 		return coupon_fee;
 	}
 
-	public void setCoupon_fee(Integer coupon_fee) {
-		this.coupon_fee = coupon_fee;
+	public void setCoupon_fee(String coupon_fee) {
+		this.coupon_fee = Integer.parseInt(coupon_fee);
 	}
 
 	public String getCoupon_count() {

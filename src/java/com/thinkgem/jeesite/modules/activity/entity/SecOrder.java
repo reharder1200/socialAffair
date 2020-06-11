@@ -20,6 +20,8 @@ public class SecOrder extends DataEntity<SecOrder> {
 	private String payType;		// pay_type
 	private String payStatus;		// pay_status
 	private String totalAmount;		// total_amount
+	private String activityId; //活动ID
+	private String openid;  // 微信用户唯一标识
 	
 	/*订单类型*/
 	public static final String ORDER_TYPE_DEPOSIT = "0";//押金
@@ -85,6 +87,22 @@ public class SecOrder extends DataEntity<SecOrder> {
 
 	public void setTotalAmount(String totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+
+	public String getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(String activityId) {
+		this.activityId = activityId;
+	}
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
 	
 }

@@ -149,8 +149,10 @@ public class SecRefundController extends BaseController {
 		/**
 		 * 将获取的xml格式的字符串解析成map对象
 		 */
+		System.out.println("退款回调信息："+wxNotify);
 		Map<String, Object> map = CommonUtils.parseXml(wxNotify);
 		String result_code = (String) map.get("result_code");
+		System.out.println(result_code);
 		
 		/**
 		 * 判断result_code是否为SUCCESS,支付成功微信返回的信息中result_code为SUCCESS,接下去是订单信息，微信返回的信息具体看微信小程序支付文档
@@ -195,7 +197,7 @@ public class SecRefundController extends BaseController {
 					
 					//更新退款订单表信息
 					secPayRefundLocal.setSuccess_time(secPayRefundFromWechat.getSuccess_time());
-					secPayRefundLocal.setSettlement_refund_fee(secPayRefundFromWechat.getSettlement_refund_fee());
+					secPayRefundLocal.setSettlement_refund_fee(secPayRefundFromWechat.getSettlement_refund_fee().toString());
 					secPayRefundLocal.setRefund_recv_accout(secPayRefundFromWechat.getRefund_recv_accout());
 					secPayRefundLocal.setRefund_account(secPayRefundFromWechat.getRefund_account());
 					secPayRefundLocal.setRefund_request_source(secPayRefundFromWechat.getRefund_request_source());

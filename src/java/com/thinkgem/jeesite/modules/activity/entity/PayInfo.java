@@ -38,14 +38,10 @@ public class PayInfo implements Serializable{
 
 	private String out_trade_no;//商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
 	
-	private String out_refund_no;//商户系统内部退款单号
-
 	private String fee_type;    //符合ISO 4217标准的三位字母代码，默认人民币：CNY，详细列表请参见货币类型
 	
 	private int total_fee;      //订单总金额，单位为分
 	
-	private int refund_fee;      //退款总金额，单位为分
-
 	private String spbill_create_ip;//APP和H5支付提交用户端ip，Native支付填调用微信支付API的机器IP
 
 	private String time_start;  //订单生成时间，格式为yyyyMMddHHmmss，如2009年12月25日9点10分10秒表示为20091225091010。其他详见时间规则
@@ -148,28 +144,12 @@ public class PayInfo implements Serializable{
 		this.out_trade_no = out_trade_no;
 	}
 
-	public String getOut_refund_no() {
-		return out_refund_no;
-	}
-
-	public void setOut_refund_no(String out_refund_no) {
-		this.out_refund_no = out_refund_no;
-	}
-
 	public int getTotal_fee() {
 		return total_fee;
 	}
 
 	public void setTotal_fee(int total_fee) {
 		this.total_fee = total_fee;
-	}
-	
-	public int getRefund_fee() {
-		return refund_fee;
-	}
-
-	public void setRefund_fee(int refund_fee) {
-		this.refund_fee = refund_fee;
 	}
 
 	public String getSpbill_create_ip() {
@@ -250,17 +230,5 @@ public class PayInfo implements Serializable{
 		this.setSpbill_create_ip(CommonUtils.getClientIp(request)); // APP和H5支付提交用户端ip，Native支付填调用微信支付API的机器IP。
 		this.setTime_start(DateUtil.getFormatTime(DateUtil.getCTTDateTime(),14)); // 订单生成时间，格式为yyyyMMddHHmmss，如2009年12月25日9点10分10秒表示为20091225091010。其他详见时间规则
 		this.setTime_expire(DateUtil.getFormatTime(DateUtil.getCTTDateTime().plusMinutes(300),14)); // 订单失效时间，格式为yyyyMMddHHmmss，如2009年12月27日9点10分10秒表示为20091227091010
-	}
-	
-	//退款构造函数
-	public PayInfo(SecPayRefund secPayRefund,HttpServletRequest request) {
-		this.setTotal_fee(secPayRefund.getTotal_fee()); // 原订单总金额
-		this.setRefund_fee(secPayRefund.getRefund_fee()); // 原订单总金额
-		this.setOut_trade_no(secPayRefund.getOut_trade_no());// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
-		this.setOut_refund_no(secPayRefund.getOut_refund_no());
-		this.setAppid(Global.getConfig("APP_ID"));
-		this.setMch_id(Global.getConfig("MCH_ID")); // 微信支付分配的商户号
-		this.setNonce_str(IdGen.randomBase62(32)); // 随机字符串，长度要求在32位以内。推荐随机数生成算法
-		this.setNotify_url(Global.getConfig("URL_NOTIFY_REFUND")); // 异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
 	}
 }

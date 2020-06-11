@@ -11,6 +11,8 @@
 		a.total_amount AS "totalAmount",
 		a.create_date AS "createDate",
 		a.update_date AS "updateDate",
+		a.activity_Id as "activityId",
+		a.openid as "openid",
 		a.remarks AS "remarks"
 	</sql>
 	
@@ -39,7 +41,15 @@
 		FROM sec_order a
 		<include refid="secOrderJoins"/>
 		<where>
-			
+			<if test="activityId != null and activityId != ''">
+				AND a.activity_Id = #{activityId} 
+			</if>
+			<if test="openid != null and openid != ''">
+				AND a.openid = #{openid} 
+			</if>
+			<if test="payStatus != null and payStatus != ''">
+				AND a.pay_status = #{payStatus} 
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -77,6 +87,8 @@
 			pay_type,
 			pay_status,
 			total_amount,
+			activity_Id,
+			openid,
 			create_date,
 			update_date,
 			remarks
@@ -87,6 +99,8 @@
 			#{payType},
 			#{payStatus},
 			#{totalAmount},
+			#{activityId},
+			#{openid},
 			#{createDate},
 			#{updateDate},
 			#{remarks}
@@ -101,6 +115,8 @@
 			pay_status = #{payStatus},
 			total_amount = #{totalAmount},
 			update_date = #{updateDate},
+			activity_Id = #{activityId},
+			openid = #{openid},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
