@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
@@ -196,11 +197,17 @@ public class SecOrderController extends BaseController {
 					secPayLocal.setIs_subscribe(secPayFromWechat.getIs_subscribe());
 					secPayLocal.setTrade_type(secPayFromWechat.getTrade_type());
 					secPayLocal.setBank_type(secPayFromWechat.getBank_type());
-					secPayLocal.setSettlement_total_fee(secPayFromWechat.getSettlement_total_fee().toString());
+					if(secPayFromWechat.getSettlement_total_fee()!=null){
+						secPayLocal.setSettlement_total_fee(secPayFromWechat.getSettlement_total_fee().toString());
+					}
 					secPayLocal.setFee_type(secPayFromWechat.getFee_type());
-					secPayLocal.setCash_fee(secPayFromWechat.getCash_fee().toString());
+					if(secPayFromWechat.getCash_fee()!=null){
+						secPayLocal.setCash_fee(secPayFromWechat.getCash_fee().toString());
+					}
 					secPayLocal.setCash_fee_type(secPayFromWechat.getCash_fee_type());
-					secPayLocal.setCoupon_fee(secPayFromWechat.getCoupon_fee().toString());
+					if(secPayFromWechat.getCoupon_fee()!=null){
+						secPayLocal.setCash_fee(secPayFromWechat.getCoupon_fee().toString());
+					}
 					secPayLocal.setCoupon_count(secPayFromWechat.getCoupon_count());
 					secPayLocal.setTransaction_id(secPayFromWechat.getTransaction_id());
 					secPayLocal.setTime_end(secPayFromWechat.getTime_end());

@@ -197,7 +197,9 @@ public class SecRefundController extends BaseController {
 					
 					//更新退款订单表信息
 					secPayRefundLocal.setSuccess_time(secPayRefundFromWechat.getSuccess_time());
-					secPayRefundLocal.setSettlement_refund_fee(secPayRefundFromWechat.getSettlement_refund_fee().toString());
+					if(secPayRefundFromWechat.getSettlement_refund_fee()!=null){
+						secPayRefundLocal.setSettlement_refund_fee(secPayRefundFromWechat.getSettlement_refund_fee().toString());
+					}
 					secPayRefundLocal.setRefund_recv_accout(secPayRefundFromWechat.getRefund_recv_accout());
 					secPayRefundLocal.setRefund_account(secPayRefundFromWechat.getRefund_account());
 					secPayRefundLocal.setRefund_request_source(secPayRefundFromWechat.getRefund_request_source());
