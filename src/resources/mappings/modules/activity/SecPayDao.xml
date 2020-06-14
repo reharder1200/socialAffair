@@ -176,7 +176,7 @@
 			coupon_count = #{coupon_count},
 			transaction_id = #{transaction_id},
 			attach = #{attach},
-			time_end = #{v},
+			time_end = #{time_end},
 			pay_status = #{payStatus}
 		WHERE id = #{id}
 	</update>

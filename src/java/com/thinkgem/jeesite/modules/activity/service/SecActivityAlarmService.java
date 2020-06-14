@@ -43,5 +43,4 @@ public class SecActivityAlarmService extends CrudService<SecActivityAlarmDao, Se
 	public void delete(SecActivityAlarm secActivityAlarm) {
 		super.delete(secActivityAlarm);
 	}
-	
 }
