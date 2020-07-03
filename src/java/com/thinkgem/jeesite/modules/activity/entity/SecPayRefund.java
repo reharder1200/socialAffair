@@ -22,22 +22,22 @@ public class SecPayRefund extends DataEntity<SecPayRefund> {
 	private String nonce_str;		// 随机字符串
 	private String sign;		// 签名
 	private String sign_type;		// 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
-	private Integer total_fee;		// 订单总金额，单位为分
-	private Integer refund_fee;		// 退款总金额，单位为分
+	private String total_fee;		// 订单总金额，单位为分
+	private String refund_fee;		// 退款总金额，单位为分
 	private String refund_desc;		//退款原因
-	private Integer settlement_total_fee;		// 应结订单金额=订单金额-非充值代金券金额，应结订单金额									&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
-	private Integer settlement_refund_fee;		// 应结退款金额							&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
+	private String settlement_total_fee;		// 应结订单金额=订单金额-非充值代金券金额，应结订单金额									&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
+	private String settlement_refund_fee;		// 应结退款金额							&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
 	private String refund_fee_type;		// 货币类型，符合ISO4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
 	private String fee_type;		// 货币类型，符合ISO4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
-	private Integer cash_fee;		// 现金支付金额订单现金支付金额，
-	private Integer cash_refund_fee;		// 现金退款金额
+	private String cash_fee;		// 现金支付金额订单现金支付金额，
+	private String cash_refund_fee;		// 现金退款金额
 	private String cash_fee_type;		// 货币类型，符合ISO4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
-	private Integer coupon_refund_fee;		// 代金券退款金额									&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
+	private String coupon_refund_fee;		// 代金券退款金额									&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
 	private String coupon_refund_count;		// 退款代金券使用数量
 	private String transaction_id;		// 微信支付订单号
 	private String refundStatus;	//退款状态
 	
-	private Date success_time;	//退款成功时间
+	private String success_time;	//退款成功时间
 	private String refund_recv_accout;	//取当前退款单的退款入账方
 	private String refund_account;	//退款资金来源
 	private String refund_request_source;	//退款发起来源
@@ -134,44 +134,12 @@ public class SecPayRefund extends DataEntity<SecPayRefund> {
 		this.sign_type = sign_type;
 	}
 
-	public Integer getTotal_fee() {
-		return total_fee;
-	}
-
-	public void setTotal_fee(String total_fee) {
-		this.total_fee = Integer.parseInt(total_fee);
-	}
-
-	public Integer getRefund_fee() {
-		return refund_fee;
-	}
-
-	public void setRefund_fee(String refund_fee) {
-		this.refund_fee = Integer.parseInt(refund_fee);
-	}
-
 	public String getRefund_desc() {
 		return refund_desc;
 	}
 
 	public void setRefund_desc(String refund_desc) {
 		this.refund_desc = refund_desc;
-	}
-
-	public Integer getSettlement_total_fee() {
-		return settlement_total_fee;
-	}
-
-	public void setSettlement_total_fee(String settlement_total_fee) {
-		this.settlement_total_fee = Integer.parseInt(settlement_total_fee);
-	}
-
-	public Integer getSettlement_refund_fee() {
-		return settlement_refund_fee;
-	}
-
-	public void setSettlement_refund_fee(String settlement_refund_fee) {
-		this.settlement_refund_fee = Integer.parseInt(settlement_refund_fee);
 	}
 
 	public String getRefund_fee_type() {
@@ -190,36 +158,12 @@ public class SecPayRefund extends DataEntity<SecPayRefund> {
 		this.fee_type = fee_type;
 	}
 
-	public Integer getCash_fee() {
-		return cash_fee;
-	}
-
-	public void setCash_fee(String cash_fee) {
-		this.cash_fee = Integer.parseInt(cash_fee);
-	}
-
-	public Integer getCash_refund_fee() {
-		return cash_refund_fee;
-	}
-
-	public void setCash_refund_fee(String cash_refund_fee) {
-		this.cash_refund_fee = Integer.parseInt(cash_refund_fee);
-	}
-
 	public String getCash_fee_type() {
 		return cash_fee_type;
 	}
 
 	public void setCash_fee_type(String cash_fee_type) {
 		this.cash_fee_type = cash_fee_type;
-	}
-
-	public Integer getCoupon_refund_fee() {
-		return coupon_refund_fee;
-	}
-
-	public void setCoupon_refund_fee(String coupon_refund_fee) {
-		this.coupon_refund_fee = Integer.parseInt(coupon_refund_fee);
 	}
 
 	public String getCoupon_refund_count() {
@@ -262,11 +206,11 @@ public class SecPayRefund extends DataEntity<SecPayRefund> {
 		this.err_code_des = err_code_des;
 	}
 
-	public Date getSuccess_time() {
+	public String getSuccess_time() {
 		return success_time;
 	}
 
-	public void setSuccess_time(Date success_time) {
+	public void setSuccess_time(String success_time) {
 		this.success_time = success_time;
 	}
 
@@ -294,5 +238,60 @@ public class SecPayRefund extends DataEntity<SecPayRefund> {
 		this.refund_request_source = refund_request_source;
 	}
 
-	
+	public String getTotal_fee() {
+		return total_fee;
+	}
+
+	public void setTotal_fee(String total_fee) {
+		this.total_fee = total_fee;
+	}
+
+	public String getRefund_fee() {
+		return refund_fee;
+	}
+
+	public void setRefund_fee(String refund_fee) {
+		this.refund_fee = refund_fee;
+	}
+
+	public String getSettlement_total_fee() {
+		return settlement_total_fee;
+	}
+
+	public void setSettlement_total_fee(String settlement_total_fee) {
+		this.settlement_total_fee = settlement_total_fee;
+	}
+
+	public String getSettlement_refund_fee() {
+		return settlement_refund_fee;
+	}
+
+	public void setSettlement_refund_fee(String settlement_refund_fee) {
+		this.settlement_refund_fee = settlement_refund_fee;
+	}
+
+	public String getCash_fee() {
+		return cash_fee;
+	}
+
+	public void setCash_fee(String cash_fee) {
+		this.cash_fee = cash_fee;
+	}
+
+	public String getCash_refund_fee() {
+		return cash_refund_fee;
+	}
+
+	public void setCash_refund_fee(String cash_refund_fee) {
+		this.cash_refund_fee = cash_refund_fee;
+	}
+
+	public String getCoupon_refund_fee() {
+		return coupon_refund_fee;
+	}
+
+	public void setCoupon_refund_fee(String coupon_refund_fee) {
+		this.coupon_refund_fee = coupon_refund_fee;
+	}
+
 }

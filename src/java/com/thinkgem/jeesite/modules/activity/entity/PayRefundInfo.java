@@ -104,8 +104,8 @@ public class PayRefundInfo implements Serializable {
 
 	//退款构造函数
 	public PayRefundInfo(SecPayRefund secPayRefund,HttpServletRequest request) {
-		this.setTotal_fee(secPayRefund.getTotal_fee()); // 原订单总金额
-		this.setRefund_fee(secPayRefund.getRefund_fee()); // 原订单总金额
+		this.setTotal_fee(Integer.parseInt(secPayRefund.getTotal_fee())); // 原订单总金额
+		this.setRefund_fee(Integer.parseInt(secPayRefund.getRefund_fee())); // 原订单总金额
 		this.setOut_trade_no(secPayRefund.getOut_trade_no());// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
 		this.setOut_refund_no(secPayRefund.getOut_refund_no());
 		this.setAppid(Global.getConfig("APP_ID"));

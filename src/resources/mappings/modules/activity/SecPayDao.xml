@@ -1,7 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecPayDao">
-    
+    <resultMap type="SecPay" id="SecPayMap">
+    	<id property="id" column="id"/>
+    	<result property="openid" column="openid"/>
+    	<result property="out_trade_no" column="out_trade_no"/>
+    	<result property="appid" column="appid"/>
+    	<result property="createDate" column="create_date"/>
+    	<result property="body" column="body"/>
+    	<result property="detail" column="detail"/>
+    	<result property="mch_id" column="mch_id"/>
+    	<result property="updateDate" column="update_date"/>
+    	<result property="remarks" column="remarks"/>
+    	<result property="device_info" column="device_info"/>
+    	<result property="nonce_str" column="nonce_str"/>
+    	<result property="sign" column="sign"/>
+    	<result property="sign_type" column="sign_type"/>
+    	<result property="is_subscribe" column="is_subscribe"/>
+    	<result property="trade_type" column="trade_type"/>
+    	<result property="bank_type" column="bank_type"/>
+    	<result property="total_fee" column="total_fee"/>
+    	<result property="settlement_total_fee" column="settlement_total_fee"/>
+    	<result property="fee_type" column="fee_type"/>
+    	<result property="cash_fee" column="cash_fee"/>
+    	<result property="cash_fee_type" column="cash_fee_type"/>
+    	<result property="coupon_fee" column="coupon_fee"/>
+    	<result property="coupon_count" column="coupon_count"/>
+    	<result property="transaction_id" column="transaction_id"/>
+    	<result property="attach" column="attach"/>
+    	<result property="time_end" column="time_end"/>
+    	<result property="payStatus" column="pay_status"/>
+    </resultMap>
 	<sql id="secPayColumns">
 		a.id AS "id",
 		a.openid AS "openid",
@@ -36,7 +65,7 @@
 	<sql id="secPayJoins">
 	</sql>
     
-	<select id="get" resultType="SecPay">
+	<select id="get" resultMap="SecPayMap">
 		SELECT 
 			<include refid="secPayColumns"/>
 		FROM sec_pay a
@@ -44,7 +73,7 @@
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="getByOutTradeNo" resultType="SecPay">
+	<select id="getByOutTradeNo" resultMap="SecPayMap">
 		SELECT 
 			<include refid="secPayColumns"/>
 		FROM sec_pay a
@@ -52,7 +81,7 @@
 		WHERE a.out_trade_no = #{out_trade_no}
 	</select>
 	
-	<select id="findList" resultType="SecPay">
+	<select id="findList" resultMap="SecPayMap">
 		SELECT 
 			<include refid="secPayColumns"/>
 		FROM sec_pay a
@@ -70,7 +99,7 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="SecPay">
+	<select id="findAllList" resultMap="SecPayMap">
 		SELECT 
 			<include refid="secPayColumns"/>
 		FROM sec_pay a

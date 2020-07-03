@@ -128,9 +128,14 @@ public class WxPayUtil {
 				mapResult.put("signType", "MD5");
 				mapResult.put("sign", signAgain);
 				mapResult.put("wxResponse", "SUCCESS");//微信响应ok
+			}else{
+				System.out.println("微信支付异常，订单号："+secPay.getOut_trade_no()+",错误代码："+resultMap.get("err_code").toString()+resultMap.get("err_code_des"));//打印错误信息
+				log.info("微信支付异常，订单号："+secPay.getOut_trade_no()+",错误代码："+resultMap.get("err_code").toString()+resultMap.get("err_code_des"));//打印错误信息
+				mapResult.put("wxResponse", "UNSUCCESS");//微信返回异常信息
 			}
 		}else{
-			System.out.println(resultMap.get("return_msg"));//打印错误信息
+			System.out.println("微信支付错误，订单号："+secPay.getOut_trade_no()+",错误原因："+resultMap.get("return_msg"));//打印错误信息
+			log.info("微信支付错误，订单号："+secPay.getOut_trade_no()+",错误原因："+resultMap.get("return_msg"));//打印错误信息
 			mapResult.put("wxResponse", "FAIL");//微信响应失败
 		}
 	}
@@ -182,12 +187,14 @@ public class WxPayUtil {
 				return sePayRefundFromWechat;
 			}else{
 				mapResult.put("wxResponse", "UNSUCCESS");//微信响应ok
-				System.out.println("微信退款失败原因："+resultMap.get("err_code").toString() + resultMap.get("err_code_des").toString());
+				System.out.println("微信退款失败，退款订单号："+secPayRefund.getOut_refund_no()+"，错误原因："+resultMap.get("err_code").toString() + resultMap.get("err_code_des").toString());
+				log.info("微信退款异常，退款订单号："+secPayRefund.getOut_refund_no()+"，错误原因："+resultMap.get("err_code").toString() + resultMap.get("err_code_des").toString());
 				SecPayRefund sePayRefundFromWechat = (SecPayRefund)CommonUtils.map2Object(resultMap, SecPayRefund.class);
 				return sePayRefundFromWechat;
 			}
 		}else{
 			System.out.println(resultMap.get("return_msg"));//打印错误信息
+			log.info("微信退款失败，退款订单号："+secPayRefund.getOut_refund_no()+"，错误原因："+resultMap.get("return_msg"));
 			mapResult.put("wxResponse", "FAIL");//微信响应失败
 			mapResult.put("failReason", resultMap.get("return_msg").toString());//微信响应失败
 			return null;
@@ -198,7 +205,7 @@ public class WxPayUtil {
 	public static void main(String[] args) {
 		Map<String, Object> resultMap =new HashMap<>();
 		resultMap.put("total_fee", 1);
-		SecPayRefund sePayRefundFromWechat = (SecPayRefund)CommonUtils.map2Object(resultMap, SecPayRefund.class);
+		SecPay sePayRefundFromWechat = (SecPay)CommonUtils.map2Object(resultMap, SecPay.class);
 		System.out.println(sePayRefundFromWechat.getTotal_fee());
 	}
 }

@@ -138,6 +138,7 @@ public class SecRefundController extends BaseController {
 	 * @throws Exception 
 	 */
 	@RequestMapping("notify")
+	@ResponseBody
 	public String getWxRespones(@RequestBody String wxNotify) throws Exception {
 
 		/**
@@ -151,14 +152,14 @@ public class SecRefundController extends BaseController {
 		 */
 		System.out.println("退款回调信息："+wxNotify);
 		Map<String, Object> map = CommonUtils.parseXml(wxNotify);
-		String result_code = (String) map.get("result_code");
-		System.out.println(result_code);
+		String return_code = (String) map.get("return_code");
+		System.out.println(return_code);
 		
 		/**
 		 * 判断result_code是否为SUCCESS,支付成功微信返回的信息中result_code为SUCCESS,接下去是订单信息，微信返回的信息具体看微信小程序支付文档
 		 * 微信返回支付结果通知地址：https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_7&index=8
 		 */
-		if (result_code.replaceAll("<![CDATA[1]]>", "1").equals("SUCCESS")) {
+		if (return_code.replaceAll("<![CDATA[1]]>", "1").equals("SUCCESS")) {
 			
 			//获得加密信息
 			String req_info = (String) map.get("req_info");
@@ -186,20 +187,14 @@ public class SecRefundController extends BaseController {
 			/**
 			 * 比对数据,如果金额相同且退款订单号相同，则返回PAY_SUCCESS，否则返回PAY_FAIL
 			 */
-			if (secPayRefundFromWechat.getRefund_fee() == secPayRefundLocal.getRefund_fee() && secPayRefundFromWechat.getOut_refund_no().equals(secPayRefundLocal.getOut_refund_no())) {
-				if(secRefundLocal.getRefundStatus().equals(SecRefund.REFUND_STATUS_COMPLETE)){
+			if (secPayRefundFromWechat.getRefund_fee().equals(secPayRefundLocal.getRefund_fee()) && secPayRefundFromWechat.getOut_refund_no().equals(secPayRefundLocal.getOut_refund_no())) {
+				if(secPayRefundLocal.getRefundStatus().equals(SecPayRefund.REFUND_STATUS_SUCCESS)){
 					//订单已处理过
 					
 				}else{
-					//更新退款单信息
-					secRefundLocal.setRefundStatus((SecRefund.REFUND_STATUS_COMPLETE));
-					secRefundService.save(secRefundLocal);
-					
 					//更新退款订单表信息
 					secPayRefundLocal.setSuccess_time(secPayRefundFromWechat.getSuccess_time());
-					if(secPayRefundFromWechat.getSettlement_refund_fee()!=null){
-						secPayRefundLocal.setSettlement_refund_fee(secPayRefundFromWechat.getSettlement_refund_fee().toString());
-					}
+					secPayRefundLocal.setSettlement_refund_fee(secPayRefundFromWechat.getSettlement_refund_fee());
 					secPayRefundLocal.setRefund_recv_accout(secPayRefundFromWechat.getRefund_recv_accout());
 					secPayRefundLocal.setRefund_account(secPayRefundFromWechat.getRefund_account());
 					secPayRefundLocal.setRefund_request_source(secPayRefundFromWechat.getRefund_request_source());

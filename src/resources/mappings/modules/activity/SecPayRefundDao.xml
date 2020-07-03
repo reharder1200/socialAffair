@@ -1,7 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thinkgem.jeesite.modules.activity.dao.SecPayRefundDao">
-    
+    <resultMap type="SecPayRefund" id="SecPayRefundMap">
+    	<id property="id" column="id"/>
+    	<result property="openid" column="openid"/>
+    	<result property="out_trade_no" column="out_trade_no"/>
+    	<result property="out_refund_no" column="out_refund_no"/>
+    	<result property="refund_desc" column="refund_desc"/>
+    	<result property="refund_id" column="refund_id"/>
+    	<result property="appid" column="appid"/>
+    	<result property="mch_id" column="mch_id"/>
+    	<result property="updateDate" column="update_date"/>
+    	<result property="createDate" column="create_date"/>
+    	<result property="remarks" column="remarks"/>
+    	<result property="nonce_str" column="nonce_str"/>
+    	<result property="sign" column="sign"/>
+    	<result property="sign_type" column="sign_type"/>
+    	<result property="total_fee" column="total_fee"/>
+    	<result property="settlement_total_fee" column="settlement_total_fee"/>
+    	<result property="fee_type" column="fee_type"/>
+    	<result property="cash_fee" column="cash_fee"/>
+    	<result property="cash_fee_type" column="cash_fee_type"/>
+    	<result property="err_code" column="err_code"/>
+    	<result property="coupon_refund_count" column="coupon_refund_count"/>
+    	<result property="transaction_id" column="transaction_id"/>
+    	<result property="coupon_refund_fee" column="coupon_refund_fee"/>
+    	<result property="refundStatus" column="refund_status"/>
+    	<result property="cash_refund_fee" column="cash_refund_fee"/>
+    	<result property="refund_fee_type" column="refund_fee_type"/>
+    	<result property="settlement_refund_fee" column="settlement_refund_fee"/>
+    	<result property="refund_fee" column="refund_fee"/>
+    	<result property="err_code_des" column="err_code_des"/>
+    	<result property="success_time" column="success_time"/>
+    	<result property="refund_recv_accout" column="refund_recv_accout"/>
+    	<result property="refund_account" column="refund_account"/>
+    	<result property="refund_request_source" column="refund_request_source"/>
+    </resultMap>
 	<sql id="secPayRefundColumns">
 		a.id AS "id",
 		a.openid AS "openid",
@@ -20,7 +54,6 @@
 		a.cash_fee AS "cash_fee",
 		a.cash_fee_type AS "cash_fee_type",
 		a.transaction_id AS "transaction_id",
-		a.time_end AS "time_end",
 		a.create_date AS "createDate",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
@@ -42,7 +75,7 @@
 	<sql id="secPayRefundJoins">
 	</sql>
     
-	<select id="get" resultType="SecPayRefund">
+	<select id="get" resultMap="SecPayRefundMap">
 		SELECT 
 			<include refid="secPayRefundColumns"/>
 		FROM sec_pay_refund a
@@ -50,7 +83,7 @@
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="getByOutRefundNo" resultType="SecPayRefund">
+	<select id="getByOutRefundNo" resultMap="SecPayRefundMap">
 		SELECT 
 			<include refid="secPayRefundColumns"/>
 		FROM sec_pay_refund a
@@ -58,7 +91,7 @@
 		WHERE a.out_refund_no = #{out_refund_no}
 	</select>
 	
-	<select id="findList" resultType="SecPayRefund">
+	<select id="findList" resultMap="SecPayRefundMap">
 		SELECT 
 			<include refid="secPayRefundColumns"/>
 		FROM sec_pay_refund a
@@ -76,7 +109,7 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="SecPayRefund">
+	<select id="findAllList" resultMap="SecPayRefundMap">
 		SELECT 
 			<include refid="secPayRefundColumns"/>
 		FROM sec_pay_refund a

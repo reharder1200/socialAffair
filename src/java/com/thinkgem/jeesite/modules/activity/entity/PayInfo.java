@@ -216,7 +216,7 @@ public class PayInfo implements Serializable{
 		this.setBody(secPay.getBody()); 
 		this.setDetail(secPay.getDetail());
 		this.setAttach(secPay.getAttach());
-		this.setTotal_fee(secPay.getTotal_fee()); // 总金额
+		this.setTotal_fee(Integer.parseInt(secPay.getTotal_fee())); // 总金额
 		this.setOut_trade_no(secPay.getOut_trade_no());// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
 		this.setOpenid(secPay.getOpenid()); // 微信用户id
 		this.setAppid(Global.getConfig("APP_ID"));

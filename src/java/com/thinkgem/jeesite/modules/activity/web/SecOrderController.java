@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.activity.web;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,9 +32,12 @@ import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.activity.entity.MerchantOrder;
 import com.thinkgem.jeesite.modules.activity.entity.SecActivity;
+import com.thinkgem.jeesite.modules.activity.entity.SecActivityApply;
 import com.thinkgem.jeesite.modules.activity.entity.SecOrder;
 import com.thinkgem.jeesite.modules.activity.entity.SecPay;
 import com.thinkgem.jeesite.modules.activity.entity.SecUser;
+import com.thinkgem.jeesite.modules.activity.service.SecActivityApplyService;
+import com.thinkgem.jeesite.modules.activity.service.SecActivityService;
 import com.thinkgem.jeesite.modules.activity.service.SecOrderService;
 import com.thinkgem.jeesite.modules.activity.service.SecPayService;
 import com.thinkgem.jeesite.modules.activity.utils.CommonUtils;
@@ -114,14 +118,14 @@ public class SecOrderController extends BaseController {
 		
 		Map<String, Object> map =  new HashMap<>();
 		if(secActivity.getId()!=null && secOrder.getTotalAmount() != null && secUser.getWxOpenid()!=null){
-			secOrder.setActivityId(secActivity.getId());
+			/*secOrder.setActivityId(secActivity.getId());
 			secOrder.setOpenid(secUser.getWxOpenid());
-			secOrder.setPayStatus(SecOrder.PAY_STATUS_TOPAY);//待支付状态
+			secOrder.setPayStatus(SecOrder.PAY_STATUS_PAID);//已支付状态
 			List<SecOrder> existList = secOrderService.findList(secOrder);
-			if(existList!=null && existList.size()>0){//避免针对同一个活动重复下单
+			if(existList!=null && existList.size()>0){//避免针对同一个活动重复下单（逻辑有问题）
 				result = false;
-				map.put("error_message", "当前用户当前活动已存在待支付订单信息！");
-			}else{
+				map.put("error_message", "请勿重复下单！");
+			}else{*/
 				if(secOrder.getOrderType()!=null && secOrder.getOrderType().equals(SecOrder.ORDER_TYPE_DEPOSIT)){//押金订单
 					secOrderService.createOrder_deposit(secActivity,secOrder,secUser,request,map);
 				}else if(secOrder.getOrderType()!=null && secOrder.getOrderType().equals(SecOrder.ORDER_TYPE_SIGN)){//报名订单
@@ -129,7 +133,7 @@ public class SecOrderController extends BaseController {
 				}else{
 					result = false;
 				}
-			}
+			/*}*/
 		}else{
 			result = false;
 		}
@@ -146,6 +150,7 @@ public class SecOrderController extends BaseController {
 	 * @throws Exception 
 	 */
 	@RequestMapping("notify")
+	@ResponseBody
 	public String getWxRespones(@RequestBody String wxNotify) throws Exception {
 
 		/**
@@ -178,7 +183,7 @@ public class SecOrderController extends BaseController {
 			/**
 			 * 比对数据,如果金额相同且用户id相同，则返回PAY_SUCCESS，否则返回PAY_FAIL
 			 */
-			if (secPayFromWechat.getTotal_fee() == secPayLocal.getTotal_fee() && secPayLocal.getOpenid().equals(secPayFromWechat.getOpenid())) {
+			if (secPayFromWechat.getTotal_fee().equals(secPayLocal.getTotal_fee()) && secPayLocal.getOpenid().equals(secPayFromWechat.getOpenid())) {
 				if(secPayLocal.getPayStatus().equals(SecPay.PAY_STATUS_CONFIRM)){
 					//订单已处理过
 					
@@ -197,17 +202,11 @@ public class SecOrderController extends BaseController {
 					secPayLocal.setIs_subscribe(secPayFromWechat.getIs_subscribe());
 					secPayLocal.setTrade_type(secPayFromWechat.getTrade_type());
 					secPayLocal.setBank_type(secPayFromWechat.getBank_type());
-					if(secPayFromWechat.getSettlement_total_fee()!=null){
-						secPayLocal.setSettlement_total_fee(secPayFromWechat.getSettlement_total_fee().toString());
-					}
+					secPayLocal.setSettlement_total_fee(secPayFromWechat.getSettlement_total_fee());
 					secPayLocal.setFee_type(secPayFromWechat.getFee_type());
-					if(secPayFromWechat.getCash_fee()!=null){
-						secPayLocal.setCash_fee(secPayFromWechat.getCash_fee().toString());
-					}
+					secPayLocal.setCash_fee(secPayFromWechat.getCash_fee());
 					secPayLocal.setCash_fee_type(secPayFromWechat.getCash_fee_type());
-					if(secPayFromWechat.getCoupon_fee()!=null){
-						secPayLocal.setCash_fee(secPayFromWechat.getCoupon_fee().toString());
-					}
+					secPayLocal.setCash_fee(secPayFromWechat.getCoupon_fee());
 					secPayLocal.setCoupon_count(secPayFromWechat.getCoupon_count());
 					secPayLocal.setTransaction_id(secPayFromWechat.getTransaction_id());
 					secPayLocal.setTime_end(secPayFromWechat.getTime_end());
@@ -221,5 +220,93 @@ public class SecOrderController extends BaseController {
 		}
 		return PAY_FAIL;
 	}
-
+	
+	public static void main(String[] args){
+		String wxNotify = "<xml><appid><![CDATA[wxcccbf49e913f9b69]]></appid>"
+			+"<attach><![CDATA[candidate_pay]]></attach>"
+			+"<bank_type><![CDATA[GDB_CREDIT]]></bank_type>"
+			+"<cash_fee><![CDATA[1]]></cash_fee>"
+			+"<device_info><![CDATA[WEB]]></device_info>"
+			+"<fee_type><![CDATA[CNY]]></fee_type>"
+			+"<is_subscribe><![CDATA[N]]></is_subscribe>"
+			+"<mch_id><![CDATA[1594217211]]></mch_id>"
+			+"<nonce_str><![CDATA[oQ47rjxMODKAmFcPNZwxamCG1YwsiOib]]></nonce_str>"
+			+"<openid><![CDATA[oMxYL42xXNBo3O2BsFFAF430-7hg]]></openid>"
+			+"<out_trade_no><![CDATA[itflHVgZK195WgFe4oh1CrvdxUAqAf6m]]></out_trade_no>"
+			+"<result_code><![CDATA[SUCCESS]]></result_code>"
+			+"<return_code><![CDATA[SUCCESS]]></return_code>"
+			+"<sign><![CDATA[56DB5E9F33997B255F30F1EFA4B45C70]]></sign>"
+			+"<time_end><![CDATA[20200702170759]]></time_end>"
+			+"<total_fee>1</total_fee>"
+			+"<trade_type><![CDATA[JSAPI]]></trade_type>"
+			+"<transaction_id><![CDATA[4200000604202007023303532350]]></transaction_id>"
+			+"</xml>";
+		
+		Map<String, Object> map=new HashMap<>();
+		try {
+			map = CommonUtils.parseXml(wxNotify);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String result_code = (String) map.get("result_code");
+		
+		/**
+		 * 判断result_code是否为SUCCESS,支付成功微信返回的信息中result_code为SUCCESS,接下去是订单信息，微信返回的信息具体看微信小程序支付文档
+		 * 微信返回支付结果通知地址：https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_7&index=8
+		 */
+		if (result_code.replaceAll("<![CDATA[1]]>", "1").equals("SUCCESS")) {
+			
+			/**
+			 * 步骤要点：微信服务器会返回我们之前写入商户订单号，我们自己通过订单号查找我们系统对应那张订单，进行对应信息比较
+			 * 这里比较金额相同且用户id，如果微信返回的金额和用户id与我们数据库一致，我们就认为支付成功，返会PAY_SUCCESS给微信服务器
+			 * 然后微信服务器就会给我们的商户账号转账
+			 */
+			SecPay secPayFromWechat = (SecPay) CommonUtils.map2Object(map, SecPay.class);
+			System.out.println("");
+			SecPay secPayLocal = new SecPay();
+			secPayLocal.setTotal_fee("1");
+			secPayLocal.setOpenid("oMxYL42xXNBo3O2BsFFAF430-7hg");
+			SecOrder secOrderLocal = new SecOrder();
+			/**
+			 * 比对数据,如果金额相同且用户id相同，则返回PAY_SUCCESS，否则返回PAY_FAIL
+			 */
+			if (secPayFromWechat.getTotal_fee().equals(secPayLocal.getTotal_fee()) && secPayLocal.getOpenid().equals(secPayFromWechat.getOpenid())) {
+				System.out.println("");
+			}else{
+				System.out.println("cha");
+			}
+				/*if(secPayLocal.getPayStatus().equals(SecPay.PAY_STATUS_CONFIRM)){
+					//订单已处理过
+					
+				}else{
+					//更新订单表信息
+					secOrderLocal.setPayStatus(SecOrder.PAY_STATUS_PAID);//已完成支付
+					//secOrderService.save(secOrderLocal);
+					
+					//更新支付表信息
+					secPayLocal.setAppid(secPayFromWechat.getAppid());
+					secPayLocal.setMch_id(secPayFromWechat.getMch_id());
+					secPayLocal.setDevice_info(secPayFromWechat.getDevice_info());
+					secPayLocal.setNonce_str(secPayFromWechat.getNonce_str());
+					secPayLocal.setSign(secPayFromWechat.getSign());
+					secPayLocal.setSign_type(secPayFromWechat.getSign_type());
+					secPayLocal.setIs_subscribe(secPayFromWechat.getIs_subscribe());
+					secPayLocal.setTrade_type(secPayFromWechat.getTrade_type());
+					secPayLocal.setBank_type(secPayFromWechat.getBank_type());
+					secPayLocal.setSettlement_total_fee(secPayFromWechat.getSettlement_total_fee());
+					secPayLocal.setFee_type(secPayFromWechat.getFee_type());
+					secPayLocal.setCash_fee(secPayFromWechat.getCash_fee());
+					secPayLocal.setCash_fee_type(secPayFromWechat.getCash_fee_type());
+					secPayLocal.setCash_fee(secPayFromWechat.getCoupon_fee());
+					secPayLocal.setCoupon_count(secPayFromWechat.getCoupon_count());
+					secPayLocal.setTransaction_id(secPayFromWechat.getTransaction_id());
+					secPayLocal.setTime_end(secPayFromWechat.getTime_end());
+					secPayLocal.setUpdateDate(new Date());
+					secPayLocal.setPayStatus(SecPay.PAY_STATUS_CONFIRM);
+					//secPayService.save(secPayLocal);
+				}
+			}*/
+		}
+	}
 }

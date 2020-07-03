@@ -29,12 +29,12 @@ public class SecPay extends DataEntity<SecPay> {
 	private String is_subscribe;		// 用户是否关注公众账号，Y-关注，N-未关注
 	private String trade_type;		// JSAPI、NATIVE、APP
 	private String bank_type;		// 银行类型，采用字符串类型的银行标识
-	private Integer total_fee;		// 订单总金额，单位为分
-	private Integer settlement_total_fee;		// 应结订单金额=订单金额-非充值代金券金额，应结订单金额									&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
+	private String total_fee;		// 订单总金额，单位为分
+	private String settlement_total_fee;		// 应结订单金额=订单金额-非充值代金券金额，应结订单金额									&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
 	private String fee_type;		// 货币类型，符合ISO4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
-	private Integer cash_fee;		// 现金支付金额订单现金支付金额，
+	private String cash_fee;		// 现金支付金额订单现金支付金额，
 	private String cash_fee_type;		// 货币类型，符合ISO4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
-	private Integer coupon_fee;		// 代金券金额									&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
+	private String coupon_fee;		// 代金券金额									&lt;/td&gt;									&lt;td nowrap&gt;										&lt;input type=
 	private String coupon_count;		// 代金券使用数量
 	private String transaction_id;		// 微信支付订单号
 	private String attach;		// 商家数据包，原样返回
@@ -157,20 +157,20 @@ public class SecPay extends DataEntity<SecPay> {
 		this.bank_type = bank_type;
 	}
 
-	public Integer getTotal_fee() {
+	public String getTotal_fee() {
 		return total_fee;
 	}
 
 	public void setTotal_fee(String total_fee) {
-		this.total_fee = Integer.parseInt(total_fee);
+		this.total_fee = total_fee;
 	}
 
-	public Integer getSettlement_total_fee() {
+	public String getSettlement_total_fee() {
 		return settlement_total_fee;
 	}
 
 	public void setSettlement_total_fee(String settlement_total_fee) {
-		this.settlement_total_fee = Integer.parseInt(settlement_total_fee);
+		this.settlement_total_fee = settlement_total_fee;
 	}
 
 	public String getFee_type() {
@@ -181,12 +181,12 @@ public class SecPay extends DataEntity<SecPay> {
 		this.fee_type = fee_type;
 	}
 
-	public Integer getCash_fee() {
+	public String getCash_fee() {
 		return cash_fee;
 	}
 
 	public void setCash_fee(String cash_fee) {
-		this.cash_fee = Integer.parseInt(cash_fee);
+		this.cash_fee = cash_fee;
 	}
 
 	public String getCash_fee_type() {
@@ -197,12 +197,12 @@ public class SecPay extends DataEntity<SecPay> {
 		this.cash_fee_type = cash_fee_type;
 	}
 
-	public Integer getCoupon_fee() {
+	public String getCoupon_fee() {
 		return coupon_fee;
 	}
 
 	public void setCoupon_fee(String coupon_fee) {
-		this.coupon_fee = Integer.parseInt(coupon_fee);
+		this.coupon_fee = coupon_fee;
 	}
 
 	public String getCoupon_count() {

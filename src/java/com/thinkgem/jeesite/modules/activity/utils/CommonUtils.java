@@ -165,7 +165,9 @@ public class CommonUtils {
 					continue;
 				}
 				field.setAccessible(true);
-				field.set(obj, map.get(field.getName()));
+				if(map.get(field.getName()) !=null){
+					field.set(obj, map.get(field.getName()));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
